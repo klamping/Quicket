@@ -13,14 +13,15 @@
                 <div class="kits btn-group btn-group-sm clear">
                     <label
                         ng-repeat="kit in [] | range:target.maxHits + 1"
-                        for="{{$parent.target.value}}-kit-{{$index}}"
+                        for="{{$parent.$parent.$index}}-{{$parent.target.value}}-kit-{{kit}}"
                         class="btn btn-default"
                         ng-class="{active: round[$parent.$index][playerIdx]==kit}">
+
                             {{kit}}
                             <input type="radio"
                                 ng-model="round[$parent.$index][playerIdx]"
-                                id="{{$parent.target.value}}-kit-{{kit}}"
-                                name="{{$parent.$index}}-{{$parent.target.value}}-kit"
+                                id="{{$parent.$parent.$index}}-{{$parent.target.value}}-kit-{{kit}}"
+                                name="{{$parent.$parent.$index}}-{{$parent.target.value}}-kit"
                                 class="sr-only"
                                 value="{{kit}}" />
                     </label>

@@ -1,3 +1,7 @@
+// TODO
+// Figure out if firebase supports socket.io
+// New game should prompt for other user
+
 angular.module('quicketApp')
     .value('targets', [
         {
