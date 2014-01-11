@@ -6,3 +6,17 @@ app/bower_components
 .DS_Store
 quicket.sublime-project
 quicket.sublime-workspace
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+npm-debug.log
