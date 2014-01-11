@@ -1,6 +1,10 @@
 // TODO
 // Figure out if firebase supports socket.io
 // New game should prompt for other user
+// CICD process (push to server automatically)
+// Unit tests for scores
+// more efficient scoring
+// update names on games overview
 
 angular.module('quicketApp')
     .value('targets', [
