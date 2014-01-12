@@ -1,7 +1,6 @@
 <div class="game">
     <div class="row">
         <h2>{{result()}} {{opponent}} {{gameScore(playerIdx)}} to {{gameScore(opponentIdx)}}</h2>
-        <button ng-click="saveGame()">Save</button>
     </div>
     <div class="rounds row">
         <div class="round col-md-4" ng-repeat="round in game.rounds">

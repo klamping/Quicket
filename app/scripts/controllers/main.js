@@ -70,7 +70,11 @@ angular.module('quicketApp')
     .controller('GameCtrl', function ($scope, $firebase, $stateParams, targets) {
         var ref = new Firebase('https://quicket.firebaseio.com/games/' + $stateParams.id);
 
-        $scope.game = $firebase(ref, $scope);
+        var game = $firebase(ref, $scope);
+
+        $scope.game = [];
+
+        game.$bind($scope, 'game');
 
         $scope.targets = targets;
 
@@ -78,10 +82,6 @@ angular.module('quicketApp')
         $scope.opponentIdx = 1;
 
         $scope.opponent = 'Paul';
-
-        $scope.saveGame = function () {
-            $scope.game.$save();
-        };
 
         $scope.result = function () {
             return 'You beat ';
