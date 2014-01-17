@@ -72,8 +72,6 @@ angular.module('quicketApp')
 
         var game = $firebase(ref, $scope);
 
-        $scope.game = [];
-
         game.$bind($scope, 'game');
 
         $scope.targets = targets;
