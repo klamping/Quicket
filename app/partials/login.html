@@ -1,0 +1,26 @@
+<h2>Login</h2>
+
+<form>
+    <p ng-show="err" class="error">{{err}}</p>
+
+    <label>
+        <span>E-mail</span>
+        <input type="text" ng-model="email" />
+    </label>
+    <label>
+        <span>Password</span>
+        <input type="password" ng-model="pass" />
+    </label>
+    <label ng-cloak ng-show="createMode">
+        <span>Confirm pass</span>
+        <input type="password" ng-model="confirm" />
+    </label>
+    <label ng-cloak ng-show="createMode">
+        <span>Name</span>
+        <input type="text" ng-model="name" />
+    </label>
+    <button ng-click="login()" ng-hide="createMode">Log In</button>
+    <button ng-click="createMode = true" ng-hide="createMode">Register</button>
+    <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
+    <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+</form>
