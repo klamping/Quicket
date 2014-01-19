@@ -37,7 +37,16 @@ angular.module('quicketApp')
             maxHits: 6
         }
     ])
-    .controller('MainCtrl', function ($scope, games) {
+    .filter('range', function() {
+        return function(input, total) {
+            total = parseInt(total);
+            for (var i = 0; i<total; i++) {
+                input.push(i);
+            }
+            return input;
+        };
+    })
+    .controller('MainCtrl', function ($scope, games, user) {
         $scope.games = games;
 
         $scope.newGame = function () {
@@ -106,15 +115,5 @@ angular.module('quicketApp')
             });
 
             return sumArray(scores);
-        };
-
-    })
-    .filter('range', function() {
-        return function(input, total) {
-            total = parseInt(total);
-            for (var i = 0; i<total; i++) {
-                input.push(i);
-            }
-            return input;
         };
     });

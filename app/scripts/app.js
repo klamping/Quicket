@@ -11,14 +11,16 @@ angular.module('quicketApp', [
         // For any unmatched url, redirect home
         $urlRouterProvider.otherwise('/');
 
+        var resolveUser = function ($firebaseSimpleLogin) {
+            var ref = new Firebase(FB_URL);
+
+            return $firebaseSimpleLogin(ref);
+        };
+
         $stateProvider
             .state('login', {
-                url: 'login',
+                url: '/login',
                 templateUrl: '/partials/login.html'
-            })
-            .state('signup', {
-                url: 'signup',
-                templateUrl: '/partials/signup.html'
             })
             .state('games', {
                 url: '/',
@@ -29,7 +31,8 @@ angular.module('quicketApp', [
                         var ref = new Firebase(FB_URL + '/games');
 
                         return $firebase(ref);
-                    }
+                    },
+                    user: resolveUser
                 }
             })
             .state('games.game', {
@@ -41,12 +44,19 @@ angular.module('quicketApp', [
                         var ref = new Firebase(FB_URL + '/games/' + $stateParams.id);
 
                         return $firebase(ref);
-                    }
+                    },
+                    user: resolveUser
                 }
             });
     })
     // establish authentication
-    .run(function() {
+    .run(function($rootScope, $state) {
+        $rootScope.$on('$firebaseSimpleLogin:logout', function() {
+                // route to login page
+                if (!$state.is('login')) {
+                    $state.go('login');
+                }
+            });
 
         // TODO figure out user auth
         // Figure out how to list other users
