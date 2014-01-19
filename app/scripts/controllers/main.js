@@ -37,10 +37,8 @@ angular.module('quicketApp')
             maxHits: 6
         }
     ])
-    .controller('MainCtrl', function ($scope, $firebase) {
-        var ref = new Firebase('https://quicket.firebaseio.com/games');
-
-        $scope.games = $firebase(ref);
+    .controller('MainCtrl', function ($scope, games) {
+        $scope.games = games;
 
         $scope.newGame = function () {
             var emptyRound = [
@@ -67,11 +65,7 @@ angular.module('quicketApp')
         };
 
     })
-    .controller('GameCtrl', function ($scope, $firebase, $stateParams, targets) {
-        var ref = new Firebase('https://quicket.firebaseio.com/games/' + $stateParams.id);
-
-        var game = $firebase(ref, $scope);
-
+    .controller('GameCtrl', function ($scope, targets, game) {
         game.$bind($scope, 'game');
 
         $scope.targets = targets;

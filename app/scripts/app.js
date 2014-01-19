@@ -4,7 +4,8 @@ angular.module('quicketApp', [
         'ui.router',
         'firebase'
     ])
-    .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    .constant('FB_URL', 'https://quicket.firebaseio.com')
+    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, FB_URL) {
         $locationProvider.html5Mode(true);
 
         // For any unmatched url, redirect home
@@ -22,12 +23,26 @@ angular.module('quicketApp', [
             .state('games', {
                 url: '/',
                 templateUrl: '/partials/games.html',
-                controller: 'MainCtrl'
+                controller: 'MainCtrl',
+                resolve: {
+                    games: function ($firebase) {
+                        var ref = new Firebase(FB_URL + '/games');
+
+                        return $firebase(ref);
+                    }
+                }
             })
             .state('games.game', {
                 url: 'games/:id',
                 templateUrl: '/partials/game.html',
-                controller: 'GameCtrl'
+                controller: 'GameCtrl',
+                resolve: {
+                    game: function ($firebase, $stateParams) {
+                        var ref = new Firebase(FB_URL + '/games/' + $stateParams.id);
+
+                        return $firebase(ref);
+                    }
+                }
             });
     })
     // establish authentication
