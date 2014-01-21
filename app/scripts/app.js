@@ -20,6 +20,7 @@ angular.module('quicketApp', [
         $stateProvider
             .state('login', {
                 url: '/login',
+                controller: 'LoginCtrl',
                 templateUrl: '/partials/login.html'
             })
             .state('games', {

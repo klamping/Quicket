@@ -46,6 +46,9 @@ angular.module('quicketApp')
             return input;
         };
     })
+    .controller('LoginCtrl', function ($scope) {
+        $scope.user = {};
+    })
     .controller('MainCtrl', function ($scope, games, user) {
         $scope.games = games;
         $scope.user = user;
