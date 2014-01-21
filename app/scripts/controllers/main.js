@@ -48,6 +48,7 @@ angular.module('quicketApp')
     })
     .controller('MainCtrl', function ($scope, games, user) {
         $scope.games = games;
+        $scope.user = user;
 
         $scope.newGame = function () {
             var emptyRound = [
