@@ -1,5 +1,5 @@
 // TODO
-// Figure out if firebase supports socket.io
+// login
 // New game should prompt for other user
 // CICD process (push to server automatically)
 // Unit tests for scores
@@ -46,12 +46,9 @@ angular.module('quicketApp')
             return input;
         };
     })
-    .controller('LoginCtrl', function ($scope) {
-        $scope.user = {};
-    })
-    .controller('MainCtrl', function ($scope, games, user) {
+    .controller('GamesCtrl', function ($scope, games, auth, $state) {
         $scope.games = games;
-        $scope.user = user;
+        $scope.auth = auth;
 
         $scope.newGame = function () {
             var emptyRound = [
@@ -66,15 +63,20 @@ angular.module('quicketApp')
 
             var emptyRounds = [emptyRound, emptyRound, emptyRound];
 
+            console.log(auth.user);
+
             $scope.games.$add({
                 players: ['1', '2'],
                 rounds: emptyRounds,
                 date: Date.now()
             });
+
+            $state.go('game');
         };
 
         $scope.deleteGame = function (gId) {
             $scope.games.$remove(gId);
+            $state.go('games');
         };
 
     })

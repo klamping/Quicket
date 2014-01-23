@@ -1,6 +1,6 @@
 <div class="game" ng-if="game">
-    <div class="row">
-        <h2>{{result()}} {{opponent}} {{gameScore(playerIdx)}} to {{gameScore(opponentIdx)}}</h2>
+    <div class="page-header" style="margin-top:0">
+        <h1>{{result()}} {{opponent}} <small>{{gameScore(playerIdx)}} to {{gameScore(opponentIdx)}}</small></h1>
     </div>
     <div class="rounds row">
         <div class="round col-md-4" ng-repeat="round in game.rounds">
@@ -15,7 +15,6 @@
                         for="{{$parent.$parent.$index}}-{{$parent.target.value}}-kit-{{kit}}"
                         class="btn btn-default"
                         ng-class="{active: round[$parent.$index][playerIdx]==kit}">
-
                             {{kit}}
                             <input type="radio"
                                 ng-model="round[$parent.$index][playerIdx]"
