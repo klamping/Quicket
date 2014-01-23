@@ -2,7 +2,8 @@ angular.module('quicketApp', [
         'ngCookies',
         'ngSanitize',
         'ui.router',
-        'firebase'
+        'firebase',
+        'waitForAuth'
     ])
     .constant('FB_URL', 'https://quicket.firebaseio.com')
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, FB_URL) {

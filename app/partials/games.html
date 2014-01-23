@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="login-prompt jumbotron" ng-hide="auth.user">
+    <div class="login-prompt jumbotron" ng-show-auth="logout">
         <h1>Quicket</h1>
 
         <a href="#" ng-click="auth.$login('twitter')" class="btn btn-primary btn-lg">
@@ -7,7 +7,7 @@
         </a>
     </div>
 
-    <div ng-show="auth.user">
+    <div ng-show-auth="login">
         <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
                 <a class="navbar-brand" ui-sref="games">Quicket</a>

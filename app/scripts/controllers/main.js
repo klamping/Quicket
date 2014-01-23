@@ -1,5 +1,4 @@
 // TODO
-// login
 // New game should prompt for other user
 // CICD process (push to server automatically)
 // Unit tests for scores
@@ -51,6 +50,9 @@ angular.module('quicketApp')
         $scope.auth = auth;
 
         $scope.newGame = function () {
+            // TODO select an opponent (maybe dropdown or text input?)
+            var oppId = 2;
+
             var emptyRound = [
                 [0, 0],
                 [0, 0],
@@ -63,20 +65,25 @@ angular.module('quicketApp')
 
             var emptyRounds = [emptyRound, emptyRound, emptyRound];
 
-            console.log(auth.user);
-
-            $scope.games.$add({
-                players: ['1', '2'],
+            var add = $scope.games.$add({
+                players: [auth.user.id, oppId],
                 rounds: emptyRounds,
                 date: Date.now()
             });
 
-            $state.go('game');
+            add.then(function (info) {
+                // TODO figure out if I can avoid weird path
+                $state.go('games.game', { id: info.path.m[1] });
+            });
+
         };
 
         $scope.deleteGame = function (gId) {
             $scope.games.$remove(gId);
-            $state.go('games');
+
+            if ($state.includes('games.game', {id: gId})) {
+                $state.go('games');
+            }
         };
 
     })
