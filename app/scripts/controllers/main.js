@@ -3,6 +3,7 @@
 // CICD process (push to server automatically)
 // Unit tests for scores
 // more efficient scoring
+// Only get games where player was involved
 // update names on games overview
 
 angular.module('quicketApp')
@@ -51,7 +52,7 @@ angular.module('quicketApp')
 
         $scope.newGame = function () {
             // TODO select an opponent (maybe dropdown or text input?)
-            var oppId = 2;
+            var opponent = 'palamping';
 
             var emptyRound = [
                 [0, 0],
@@ -65,8 +66,12 @@ angular.module('quicketApp')
 
             var emptyRounds = [emptyRound, emptyRound, emptyRound];
 
+            var players = {};
+            players[auth.user.username] = true;
+            players[opponent] = true;
+
             var add = $scope.games.$add({
-                players: [auth.user.id, oppId],
+                players: players,
                 rounds: emptyRounds,
                 date: Date.now()
             });

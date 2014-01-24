@@ -12,13 +12,6 @@ angular.module('quicketApp', [
         // For any unmatched url, redirect home
         $urlRouterProvider.otherwise('/');
 
-
-        var resolveFB = function ($firebaseSimpleLogin) {
-            var ref = new Firebase(FB_URL);
-
-            return $firebaseSimpleLogin(ref);
-        };
-
         $stateProvider
             .state('games', {
                 url: '/',
@@ -30,7 +23,11 @@ angular.module('quicketApp', [
 
                         return $firebase(ref);
                     },
-                    auth: resolveFB
+                    auth: function ($firebaseSimpleLogin) {
+                        var ref = new Firebase(FB_URL);
+
+                        return $firebaseSimpleLogin(ref);
+                    }
                 }
             })
             .state('games.game', {
@@ -46,9 +43,4 @@ angular.module('quicketApp', [
                 }
             });
     })
-    // establish authentication
-    .run(function() {
-        // Figure out how to list other users
-        // Figure out how to have names for other users
-        // Fetch all other user's names
-    });
+    .run();
