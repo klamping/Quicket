@@ -51,29 +51,18 @@ angular.module('quicketApp')
         $scope.auth = auth;
 
         $scope.newGame = function () {
-            // TODO select an opponent (maybe dropdown or text input?)
-            var opponent = 'palamping';
+            var opponent = $scope.opponent;
 
-            var emptyRound = [
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0]
-            ];
+            var emptyRound = [0,0,0,0,0,0,0];
 
             var emptyRounds = [emptyRound, emptyRound, emptyRound];
 
-            var players = {};
-            players[auth.user.username] = true;
-            players[opponent] = true;
-
             var add = $scope.games.$add({
-                players: players,
                 rounds: emptyRounds,
-                date: Date.now()
+                date: Date.now(),
+                opponent: {
+                    username: opponent
+                }
             });
 
             add.then(function (info) {
