@@ -50,6 +50,8 @@ angular.module('quicketApp')
         $scope.games = games;
         $scope.auth = auth;
 
+        console.log('inGames', games);
+
         $scope.newGame = function () {
             var opponent = $scope.opponent;
 
@@ -66,6 +68,7 @@ angular.module('quicketApp')
             });
 
             add.then(function (info) {
+                console.log(add.name());
                 // TODO figure out if I can avoid weird path
                 $state.go('games.game', { id: info.path.m[1] });
             });

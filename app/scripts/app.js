@@ -12,21 +12,23 @@ angular.module('quicketApp', [
         // For any unmatched url, redirect home
         $urlRouterProvider.otherwise('/');
 
+        var ref = new Firebase(FB_URL);
+
         $stateProvider
             .state('games', {
                 url: '/',
                 templateUrl: '/partials/games.html',
                 controller: 'GamesCtrl',
                 resolve: {
-                    games: function ($firebase) {
-                        var ref = new Firebase(FB_URL + '/games');
-
-                        return $firebase(ref);
-                    },
                     auth: function ($firebaseSimpleLogin) {
-                        var ref = new Firebase(FB_URL);
-
                         return $firebaseSimpleLogin(ref);
+                    },
+                    games: function ($firebase, auth) {
+                        var fire = $firebase(ref);
+
+                        return auth.$getCurrentUser().then(function (user) {
+                            return fire.$child('users/' + user.id);
+                        });
                     }
                 }
             })
@@ -35,12 +37,17 @@ angular.module('quicketApp', [
                 templateUrl: '/partials/game.html',
                 controller: 'GameCtrl',
                 resolve: {
-                    game: function ($firebase, $stateParams) {
-                        var ref = new Firebase(FB_URL + '/games/' + $stateParams.id);
+                    game: function ($firebaseSimpleLogin, $stateParams) {
+                        $firebaseSimpleLogin(ref).$getCurrentUser.then(function (user) {
 
-                        return $firebase(ref);
+                            return ref.child('users/' + user.id + '/games/' + $stateParams.id);
+                        });
                     }
                 }
             });
     })
-    .run();
+    .run(function ($rootScope) {
+        $rootScope.$on("$firebaseSimpleLogin:login", function(e, user) {
+            console.log("User " + user.id + " successfully logged in!");
+        });
+    });
