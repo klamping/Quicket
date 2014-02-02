@@ -2,8 +2,7 @@ angular.module('quicketApp', [
         'ngCookies',
         'ngSanitize',
         'ui.router',
-        'firebase',
-        'waitForAuth'
+        'firebase'
     ])
     .constant('FB_URL', 'https://quicket.firebaseio.com')
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, FB_URL) {
@@ -15,39 +14,53 @@ angular.module('quicketApp', [
         var ref = new Firebase(FB_URL);
 
         $stateProvider
-            .state('games', {
+            .state('signIn', {
                 url: '/',
+                templateUrl: '/partials/signin.html'
+            })
+            .state('games', {
+                url: '/games',
                 templateUrl: '/partials/games.html',
                 controller: 'GamesCtrl',
                 resolve: {
-                    auth: function ($firebaseSimpleLogin) {
-                        return $firebaseSimpleLogin(ref);
-                    },
-                    games: function ($firebase, auth) {
-                        var fire = $firebase(ref);
+                    games: function ($rootScope, $firebase, $q) {
+                        var deferred = $q.defer();
 
-                        return auth.$getCurrentUser().then(function (user) {
-                            return fire.$child('users/' + user.id);
-                        });
+                        var getGames = function (user) {
+                            return $firebase(ref).$child('users/' + user.id);
+                        };
+
+                        if ($rootScope.user === null) {
+                            $rootScope.$watch('user', function () {
+                                deferred.resolve(getGames($rootScope.user));
+                            });
+                        } else {
+                            return getGames($rootScope.user);
+                        }
+
+                        return deferred.promise;
                     }
                 }
             })
             .state('games.game', {
-                url: 'games/:id',
+                url: '/:id',
                 templateUrl: '/partials/game.html',
                 controller: 'GameCtrl',
                 resolve: {
-                    game: function ($firebaseSimpleLogin, $stateParams) {
-                        $firebaseSimpleLogin(ref).$getCurrentUser.then(function (user) {
-
-                            return ref.child('users/' + user.id + '/games/' + $stateParams.id);
-                        });
+                    game: function ($rootScope, $stateParams, games) {
+                        return games.$child($stateParams.id);
                     }
                 }
             });
     })
-    .run(function ($rootScope) {
-        $rootScope.$on("$firebaseSimpleLogin:login", function(e, user) {
-            console.log("User " + user.id + " successfully logged in!");
+    .run(function ($rootScope, $state, FB_URL, $firebaseSimpleLogin) {
+        $rootScope.$on('$firebaseSimpleLogin:login', function (e, user) {
+            $rootScope.user = user;
+            $state.go('games');
         });
+        $rootScope.$on('$firebaseSimpleLogin:logout', function () {
+            $state.go('/');
+        });
+
+        $rootScope.auth = $firebaseSimpleLogin(new Firebase(FB_URL));
     });

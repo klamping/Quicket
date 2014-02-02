@@ -46,11 +46,8 @@ angular.module('quicketApp')
             return input;
         };
     })
-    .controller('GamesCtrl', function ($scope, games, auth, $state) {
+    .controller('GamesCtrl', function ($scope, games, $state) {
         $scope.games = games;
-        $scope.auth = auth;
-
-        console.log('inGames', games);
 
         $scope.newGame = function () {
             var opponent = $scope.opponent;
@@ -67,10 +64,10 @@ angular.module('quicketApp')
                 }
             });
 
+            // TODO add game to opponent
+
             add.then(function (info) {
-                console.log(add.name());
-                // TODO figure out if I can avoid weird path
-                $state.go('games.game', { id: info.path.m[1] });
+                $state.go('games.game', { id: info.name() });
             });
 
         };
@@ -85,45 +82,35 @@ angular.module('quicketApp')
 
     })
     .controller('GameCtrl', function ($scope, targets, game) {
+        // TODO why no binding no more
         game.$bind($scope, 'game');
 
         $scope.targets = targets;
 
-        $scope.playerIdx = 0;
-        $scope.opponentIdx = 1;
-
-        $scope.opponent = 'Paul';
+        $scope.opponent = game.opponent;
 
         $scope.result = function () {
             return 'You beat ';
         };
-
-        var sumArray = function (arr) {
-            if (arr.length > 0) {
-                return arr.reduce(function(previousValue, currentValue){
-                    return previousValue + currentValue;
-                });
-            } else {
-                return 0;
-            }
+    })
+    .filter('score', function (targets) {
+        var scoreKit = function (hits, type, idx) {
+            return hits * targets[idx];
         };
 
-        $scope.roundScore = function (player, round) {
-            var scores = _.map(round, function (target, idx) {
-                var numHits = target[player];
-                var value = targets[idx].value;
-                return parseInt(numHits * value, 10);
-            });
+        return function scoreData () {//data, type) {
+            return scoreKit(2, null, 1);
+            // console.log('here');
+            // var totalScore = 0;
 
-            return sumArray(scores);
-        };
+            // _.each(data, function (item, idx) {
+            //     var calc = type == 'round' ? scoreKit : scoreData;
 
-        $scope.gameScore = function (player) {
-            var rounds = $scope.game.rounds;
-            var scores = _.map(rounds, function(round) {
-                return $scope.roundScore(player, round);
-            });
+            //     console.log(calc);
 
-            return sumArray(scores);
+            //     totalScore += calc(item, type, idx);
+            // });
+
+            // return totalScore;
         };
     });
