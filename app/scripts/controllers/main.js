@@ -87,30 +87,42 @@ angular.module('quicketApp')
 
         $scope.targets = targets;
 
-        $scope.opponent = game.opponent;
-
         $scope.result = function () {
             return 'You beat ';
         };
     })
     .filter('score', function (targets) {
         var scoreKit = function (hits, type, idx) {
-            return hits * targets[idx];
+            return hits * targets[idx].value;
         };
 
-        return function scoreData () {//data, type) {
-            return scoreKit(2, null, 1);
-            // console.log('here');
-            // var totalScore = 0;
+        return function scoreData (data, type) {
+            var totalScore = 0;
 
-            // _.each(data, function (item, idx) {
-            //     var calc = type == 'round' ? scoreKit : scoreData;
+            var calc;
 
-            //     console.log(calc);
+            if (type == 'kit') {
+                console.log(data);
+            }
 
-            //     totalScore += calc(item, type, idx);
-            // });
+            switch (type) {
+                case 'kit':
+                    calc = scoreKit;
+                    break;
+                case 'round':
+                    calc = scoreData;
+                    type = 'kit';
+                    break;
+                case 'game':
+                    calc = scoreData;
+                    type = 'round';
+                    break;
+            }
 
-            // return totalScore;
+            _.each(data, function (item, idx) {
+                totalScore += calc(item, type, idx);
+            });
+
+            return totalScore;
         };
     });

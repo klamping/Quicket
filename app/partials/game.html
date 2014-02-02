@@ -1,14 +1,14 @@
 {{rounds}}
 <div class="game" ng-if="game">
     <div class="page-header" style="margin-top:0">
-        <h1>{{opponent}} <small>{{game.rounds | score:game}}</small></h1>
+        <h1>{{game.opponent.username}} <small>{{game.rounds | score:"game"}}</small></h1>
     </div>
     <div class="rounds row">
         <div class="round col-md-4" ng-repeat="round in game.rounds">
-            <h3>Round {{$index + 1}} <small>Total: {{round | score:round}}</small></h3>
+            <h3>Round {{$index + 1}} <small>Total: {{round | score:"round"}}</small></h3>
             <div class="target clearfix" ng-repeat="target in targets">
                 <div class="clearfix">
-                    <h4 class="pull-left">Target: {{target.value}} <small>Score: {{target.value | score:target}}</small></h4>
+                    <h4 class="pull-left">Target: {{target.value}} <small>Score: {{target.value | score:"kit"}}</small></h4>
                 </div>
                 <div class="kits btn-group btn-group-sm clear">
                     <label
